@@ -22,8 +22,10 @@ class FSM {
      * @param state
      */
     changeState(state) {
-        if (this.config['states'][state] !== null) {
+        if (this.config['states'][state] !== undefined) {
             this.state = state;
+        } else {
+            throw new Error();
         }
         
     }
