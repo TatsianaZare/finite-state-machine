@@ -6,6 +6,7 @@ class FSM {
     constructor(config) {
         this.config = config;
         this.state = config['initial'];
+        this.prevStates = new Array();
     }
 
     /**
@@ -23,6 +24,7 @@ class FSM {
      */
     changeState(state) {
         if (this.config['states'][state] !== undefined) {
+            this.prevStates.push(this.state);
             this.state = state;
         } else {
             throw new Error();
@@ -36,6 +38,7 @@ class FSM {
      */
     trigger(event) {
         if (this.config['states'][this.state]['transitions'][event] !== undefined) {
+            this.prevStates.push(this.state);
             this.state = this.config['states'][this.state]['transitions'][event];
         } else {
             throw new Error();
@@ -76,7 +79,16 @@ class FSM {
      * Returns false if undo is not available.
      * @returns {Boolean}
      */
-    undo() {}
+    undo() {
+        if (this.prevStates.length == 0) {
+
+            return false;
+        }
+        this.state = this.prevStates.pop();
+
+        return true;
+    }
+
 
     /**
      * Goes redo to state.
