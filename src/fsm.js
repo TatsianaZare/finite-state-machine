@@ -34,12 +34,20 @@ class FSM {
      * Changes state according to event transition rules.
      * @param event
      */
-    trigger(event) {}
+    trigger(event) {
+        if (this.config['states'][this.state]['transitions'][event] !== undefined) {
+            this.state = this.config['states'][this.state]['transitions'][event];
+        } else {
+            throw new Error();
+        }
+    }
 
     /**
      * Resets FSM state to initial.
      */
-    reset() {}
+    reset() {
+      this.state = this.config['initial'];       
+    }
 
     /**
      * Returns an array of states for which there are specified event transition rules.
@@ -47,7 +55,16 @@ class FSM {
      * @param event
      * @returns {Array}
      */
-    getStates(event) {}
+    getStates(event) {
+        if (this.config['states'][state][event] == null) {
+            this.state = this.config['states'][state][event];
+        }
+        else {
+            this.state = state;
+
+            return this.config['states'] = [];
+        }
+    }
 
     /**
      * Goes back to previous state.
@@ -66,7 +83,9 @@ class FSM {
     /**
      * Clears transition history
      */
-    clearHistory() {}
+    clearHistory() {
+        this.config['states'][this.state]['transitions'] = false;
+    }
 }
 
 module.exports = FSM;
